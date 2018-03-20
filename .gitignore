@@ -1,0 +1,11 @@
+
+# /
+/auto
+/build
+/docs
+/log
+
+# /test/
+/test/*.class
+/classes/
+/tmp.java

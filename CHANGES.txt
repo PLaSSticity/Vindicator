@@ -1,0 +1,86 @@
+Copyright (c) 2010, Cormac Flanagan (University of California, Santa Cruz)
+                    and Stephen Freund (Williams College) 
+
+All rights reserved.  
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+
+    * Neither the names of the University of California, Santa Cruz
+      and Williams College nor the names of its contributors may be
+      used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+#########################################################################
+
+Nov 19, 2014: Various bug fixes and memory performance improvements.
+              These include: more gracefully recovery from various 
+              failures, a more robust fastpath process for array 
+              accesses, and improved handling of shadow state for 
+              volatiles and threads.
+
+Aug 30, 2014: This is a large update:
+
+              Various bug fixes.  This includes corner cases in FT_CAS,
+              the instrumentor, and the shadow state representation of 
+              arrays (most notably in long-running programs with large
+              heap sizes --- see ArrayStateFactory.java).
+              
+              Arrays are now tracked in fine-grained mode by default
+              rather than being untracked by default.
+              
+              Performance: RoadRunner's shadow state could pin 
+              down objects that otherwise could be collected.  All Shadow
+              State objects (ShadowVolatile, ShadowLock, ArrayState, ...)
+              now refer back to real state via WeakReferences to avoid
+              such issues.  Some caches for array states do not use
+              weak references to avoid a run-time performance hit, but
+              could perhaps be improved in some additional way in the
+              future.
+              
+              Tools can now have more specialized fast path methods for
+              array and field accesses.  See Tool.java.
+
+July 8, 2014: Various small changes and bug fixes in instrumentation.
+              
+              New experimental CAS-based updaters.
+              
+              Updated to ASM version 5 and moved it into the rr package 
+              to enable targets using ASM to be properly loaded.
+              
+Jan 9, 2012:  Fixed typo in message reporting code for HB tool.
+
+Jan 6, 2012:  Committed change for -lines option.  It now applies to
+              array ops, field ops, but not lock ops.  It seems more
+              useful this way.
+
+Jan 5, 2012:  Committed change for -lines option.  It now applies to
+              array ops, field ops, and lock acquire/release.
+  
+
+Oct 3, 2011:  Committed and pushed small code edits from various places.
+              There were some conflicts that should have been resolved 
+              correctly.  If problems exist, please use the version from
+              June 20.

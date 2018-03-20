@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="api.txt" kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="jars/java-cup-11a.jar"/>
+	<classpathentry exported="true" kind="lib" path="jars/JFlex.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>
