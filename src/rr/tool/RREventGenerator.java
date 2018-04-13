@@ -344,29 +344,6 @@ public class RREventGenerator extends RR {
 			Assert.panic(e);
 		}
 	}
-	
-	/*****/
-//	public static void get(Thread thread) {
-//		ShadowThread currentThread = ShadowThread.getCurrentShadowThread();
-//		get(thread, currentThread);
-//	}
-//	
-//	public static void get(Thread thread, ShadowThread td) {
-//		while (true) {
-//			if (thread != null) break;
-//			Yikes.yikes("get does not know what thread is being gotten, I think.");
-//		}
-//		get(ShadowThread.getShadowThread(thread), td);
-//	}
-//	
-//	public static void get(ShadowThread thread, ShadowThread td) {
-//		try {
-//			getTool().get(thread, td);
-//		} catch (Throwable e) {
-//			Assert.panic(e);
-//		}
-//	}
-	/*****/
 
 	public static void join(Thread thread, int joinId) {
 		join(thread, 0, 0, joinId);

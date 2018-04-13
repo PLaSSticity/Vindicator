@@ -125,7 +125,6 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 	static boolean COUNT_EVENT = true;
 	static boolean TESTING_CONFIG;
 	static boolean HB_WCP_ONLY;
-	static boolean CAPO_CONFIG;
 	static boolean HB_ONLY;
 	static final boolean VERBOSE = false;
 	
@@ -310,7 +309,6 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 		PRINT_EVENT = RR.printEventOption.get();
 		TESTING_CONFIG = RR.testingConfigOption.get();
 		HB_WCP_ONLY = RR.wdcHBWCPOnlyOption.get();
-		CAPO_CONFIG = RR.CAPOOption.get();
 		HB_ONLY = RR.wdcHBOnlyOption.get();
 		
 		if (HB_ONLY) HB_WCP_ONLY = true;
@@ -330,7 +328,6 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 		Util.log("build config: " + BUILD_EVENT_GRAPH);
 		Util.log("hb wcp only config: " + HB_WCP_ONLY);
 		Util.log("hb only config: " + HB_ONLY);
-		Util.log("rule b removed config: " + CAPO_CONFIG);
 	}
 	
 	//TODO: Only a single thread should be accessing the list of races and the event graph
@@ -420,9 +417,6 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 				if (staticDCRacesOnly) {
 					if (!detectedCycle) {
 						verifiedRaces.add(DCrace);
-					} else if (CAPO_CONFIG){
-						boolean checkDCOrder = EventNode.addRuleB(startNode, endNode, true, true, commandDir);
-						Util.println("Race pair " + desc + " is " + checkDCOrder + " DC ordered.");
 					}
 					staticOnlyCheck.add(DCrace);
 				}
@@ -656,7 +650,7 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 					queue.addLast(wcpUnionPO);
 				}
 				// WDC
-				if (!HB_WCP_ONLY && !CAPO_CONFIG) {
+				if (!HB_WCP_ONLY) {
 					PerThreadQueue<CVE> ptQueue = lockData.wdcAcqQueueMap.get(otherTD);
 					if (ptQueue == null) {
 						ptQueue = lockData.wdcAcqQueueGlobal.clone();
@@ -682,7 +676,7 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 			lockData.wcpAcqQueueGlobal.addLast(wcpUnionPO);
 		}
 		// Same for WDC
-		if (!HB_WCP_ONLY && !CAPO_CONFIG) {
+		if (!HB_WCP_ONLY) {
 			PerThreadQueue<CVE> acqPTQueue = lockData.wdcAcqQueueMap.get(td);
 			if (acqPTQueue == null) {
 				acqPTQueue = lockData.wdcAcqQueueGlobal.clone();
@@ -763,7 +757,7 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 		}
 
 		// WDC: process queue elements
-		if (!HB_WCP_ONLY && !CAPO_CONFIG) {
+		if (!HB_WCP_ONLY) {
 			PerThreadQueue<CVE> acqPTQueue = lockData.wdcAcqQueueMap.get(td);
 			if (VERBOSE) Assert.assertTrue(acqPTQueue.isEmpty(td));
 			PerThreadQueue<CVE> relPTQueue = lockData.wdcRelQueueMap.get(td);
@@ -852,7 +846,7 @@ public class WDCTool extends Tool implements BarrierListener<WDCBarrierState>, O
 		}
 		
 		// WDC: add to release queues
-		if (!HB_WCP_ONLY && !CAPO_CONFIG) {
+		if (!HB_WCP_ONLY) {
 			CVE wdcCVE = new CVE(wdc, thisEventNode);
 			for (ShadowThread otherTD : ShadowThread.getThreads()) {
 				if (otherTD != td) {

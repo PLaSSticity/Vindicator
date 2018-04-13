@@ -56,8 +56,6 @@ public class Constants {
 	public static final Type OBJECT_TYPE = Type.getType(java.lang.Object.class);
 	public static final Type THREAD_TYPE = Type.getType(java.lang.Thread.class);
 	
-//	public static final Type CONCURRENT_TYPE = Type.getObjectType("java/util/concurrent/Future");
-	
 	public static final Type REFLECT_FIELD_TYPE = Type.getType(java.lang.reflect.Field.class);
 	public static final Type REFLECT_ARRAY_TYPE = Type.getType(java.lang.reflect.Array.class);
 	public static final Type RR_REFLECT_TYPE = Type.getType(rr.instrument.methods.ReflectionMethodReplacer.class);

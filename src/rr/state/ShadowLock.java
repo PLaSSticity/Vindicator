@@ -76,8 +76,7 @@ public class ShadowLock extends Decoratable {
 	 * Constructor / helper methods.
 	 */
 
-//	private ShadowLock(Object lock) { 
-	public ShadowLock(Object lock) {//TODO: Changed for GCPTool, not sure if it is correct to do so in general. 
+	private ShadowLock(Object lock) { 
 		// Assert.assertTrue(lock != null);
 		this.lock = new WeakReference<Object>(lock);
 		hashCode = counter++;

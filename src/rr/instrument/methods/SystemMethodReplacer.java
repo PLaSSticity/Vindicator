@@ -84,8 +84,7 @@ public class SystemMethodReplacer extends RRMethodAdapter implements Opcodes {
 			if (!m.isSynthetic()) {
 				if (!owner.startsWith("[") && !name.startsWith("<")) {
 					for (ClassInfo c : RRTypeInfo.declaringClassesForMethodDescriptor(RRTypeInfo.resolveMethodDescriptor(owner, name, desc))) {
-						if (c.getName().startsWith("java/lang")) {// || c.getName().startsWith("java/util/concurrent/Future")) {
-//							Util.log("opcode:"+opcode+"|c.getName():"+c.getName()+"|name:"+name+"|desc:"+desc);
+						if (c.getName().startsWith("java/lang")) {
 							for (Replacement r : systemReplacements) {
 								if (r.matches(opcode, c.getName(), name, desc)) {
 									if (RRMain.slowMode()) Util.logf("Replace %s.%s%s", c.getName(), name, desc);

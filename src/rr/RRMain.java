@@ -282,25 +282,13 @@ public class RRMain {
 		cl.add(rr.tool.RR.trackMemoryUsageOption);
 		cl.add(rr.tool.RR.printEventOption);
 		cl.add(rr.tool.RR.testingConfigOption);
-		cl.add(rr.tool.RR.raptorPrintLatexOption);
-		cl.add(rr.tool.RR.raptorPrintDatalogOption);
-		cl.add(rr.tool.RR.raptorPrintDatalogConcurrentlyOption);
-		cl.add(rr.tool.RR.raptorSetDatalogEventLimitOption);
-		cl.add(rr.tool.RR.raptorPrintLocksetOption);
-		cl.add(rr.tool.RR.raptorHBModeOption);
-		cl.add(rr.tool.RR.raptorHBPureOption);
-		cl.add(rr.tool.RR.raptorStaticInitializerOption);
-		cl.add(rr.tool.RR.raptorPrintStats);
-		cl.add(rr.tool.RR.raptorVerbose);
 		cl.add(rr.tool.RR.wdcBuildEventGraph);
 		cl.add(rr.tool.RR.wdcbGenerateFileForDetectedCycleOption);
 		cl.add(rr.tool.RR.wdcbPrintReordering);
 		cl.add(rr.tool.RR.wdcHBWCPOnlyOption);
-		cl.add(rr.tool.RR.CAPOOption);
 		cl.add(rr.tool.RR.wdcRandomReorderings);
 		cl.add(rr.tool.RR.wdcHBOnlyOption);
 		cl.add(rr.tool.RR.wdcRemoveRaceEdge);
-		cl.add(rr.tool.RR.goldilocksTrainingDataDir);
 
 		cl.addGroup("Limits");
 		cl.add(rr.tool.RR.timeOutOption);

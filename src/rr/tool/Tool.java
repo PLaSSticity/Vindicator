@@ -305,8 +305,6 @@ public abstract class Tool  {
 	 * By default, passes the event to the next tool in the chain.
 	 * */
 	public void postJoin(JoinEvent je) { next.postJoin(je); }
-	
-//	public void get(ShadowThread futureTd, ShadowThread mainTd) { next.get(futureTd, mainTd); }
 
 	/** Called right before each start operation of the target program.
 	 * By default, passes the event to the next tool in the chain.

@@ -283,7 +283,7 @@ public class ShadowThread extends Decoratable implements ShadowVar {
 		return locks;
 	}
 	
-	// Added for Goldilocks implementation
+	// Added for WDC implementation
 	public final ShadowLock getInnermostLock() {
 		if (lockDataCount == 0) {
 			return null;
