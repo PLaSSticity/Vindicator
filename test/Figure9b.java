@@ -38,51 +38,61 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package test;
 
-public class acyclicNonPredictableRace extends Thread {
+public class Figure9b extends Thread {
 
 	static int x;
 	static final Object o = new Object();
 	static final Object m = new Object();
 	static final Object p = new Object();
 	
-	static int o1m1Var;
-	static int o1m2Var;
-	static int m1p1Var;
-	static int p1m1Var;
-	static int p1o2Var;
-	static int m2p1Var;
-	static int p2o2Var;
-	static int p2m2Var;
-	static int m2p2Var;
-	static int o2rdxVar;
-	static final Object o1m1 = new Object();
-	static final Object o1m2 = new Object();
-	static final Object m1p1 = new Object();
-	static final Object p1m1 = new Object();
-	static final Object p1o2 = new Object();
-	static final Object m2p1 = new Object();
-	static final Object p2o2 = new Object();
-	static final Object p2m2 = new Object();
-	static final Object m2p2 = new Object();
-	static final Object o2rdx = new Object();
+	static int s1Var;
+	static int s2Var;
+	static int s3Var;
+	static int s4Var;
+	static int s5Var;
+	static int s6Var;
+	static int s7Var;
+	static int s8Var;
+	static int s9Var;
+	static int s10Var;
+	static int s11Var;
+	static int s12Var;
+	static int s13Var;
+	static int s14Var;
+	static final Object s1 = new Object();
+	static final Object s2 = new Object();
+	static final Object s3 = new Object();
+	static final Object s4 = new Object();
+	static final Object s5 = new Object();
+	static final Object s6 = new Object();
+	static final Object s7 = new Object();
+	static final Object s8 = new Object();
+	static final Object s9 = new Object();
+	static final Object s10 = new Object();
+	static final Object s11 = new Object();
+	static final Object s12 = new Object();
+	static final Object s13 = new Object();
+	static final Object s14 = new Object();
 
 	// Predictable race: x
-	// WDC-race: x
-	// WCP-race: ?
-	// CP-race: ?
+	// DC-race: x
 
 	static void sync(Object lock) {
 		synchronized (lock) {
-			if (lock == o1m1) o1m1Var = 1;
-			else if (lock == o1m2) o1m2Var = 1;
-			else if (lock == m1p1) m1p1Var = 1;
-			else if (lock == p1m1) p1m1Var = 1;
-			else if (lock == p1o2) p1o2Var = 1;
-			else if (lock == m2p1) m2p1Var = 1;
-			else if (lock == p2o2) p2o2Var = 1;
-			else if (lock == p2m2) p2m2Var = 1;
-			else if (lock == m2p2) m2p2Var = 1;
-			else if (lock == o2rdx) o2rdxVar = 1;
+			if (lock == s1) s1Var = 1;
+			else if (lock == s2) s2Var = 1;
+			else if (lock == s3) s3Var = 1;
+			else if (lock == s4) s4Var = 1;
+			else if (lock == s5) s5Var = 1;
+			else if (lock == s6) s6Var = 1;
+			else if (lock == s7) s7Var = 1;
+			else if (lock == s8) s8Var = 1;
+			else if (lock == s9) s9Var = 1;
+			else if (lock == s10) s10Var = 1;
+			else if (lock == s11) s11Var = 1;
+			else if (lock == s12) s12Var = 1;
+			else if (lock == s13) s13Var = 1;
+			else if (lock == s14) s14Var = 1;
 			else throw new RuntimeException();
 		}
 	}
@@ -98,8 +108,12 @@ public class acyclicNonPredictableRace extends Thread {
 	@Override
 	public void run() {
 		synchronized(o) {
-			sync(o1m1);
-			sync(o1m2);
+			sync(s1);
+			sleepSec(20);
+			sync(s11);
+			sync(s12);
+			sync(s13);
+			sync(s14);
 			x = 1;
 		}
 	}
@@ -108,11 +122,13 @@ public class acyclicNonPredictableRace extends Thread {
 		public void run() {
 			sleepSec(1);
 			synchronized(m) {
-				sync(m1p1);
+				sync(s2);
+				sync(s3);
 				sleepSec(3);
-				sync(p1m1);
-				sync(o1m1);
+				sync(s1);
+				sync(s5);
 			}
+			sync(s11);
 		}
 	}
 	
@@ -120,12 +136,13 @@ public class acyclicNonPredictableRace extends Thread {
 		public void run() {
 			sleepSec(2);
 			synchronized(p) {
-				sync(p1o2);
-				sync(p1m1);
-				sync(m1p1);
+//				sync(s4);
+				sync(s5);
 				sleepSec(5);
-				sync(m2p1);
+				sync(s2);
+				sync(s6);
 			}
+			sync(s12);
 		}
 	}
 	
@@ -133,48 +150,50 @@ public class acyclicNonPredictableRace extends Thread {
 		public void run() {
 			sleepSec(4);
 			synchronized(m) {
-				sync(m2p1);
-				sync(m2p2);
-				sleepSec(7);
-				sync(p2m2);
-				sync(o1m2);
+				sync(s6);
+				sync(s7);
+				sleepSec(9);
+				sync(s9);
+//				sync(s4);
 			}
+			sync(s13);
 		}
 	}
 	
 	public static class Test5 extends Thread implements Runnable {
 		public void run() {
-			sleepSec(6);
+			sleepSec(8);
 			synchronized(p) {
-				sync(p2o2);
-				sync(p2m2);
-				sleepSec(8);
-				sync(m2p2);
+				sync(s8);
+				sync(s9);
+				sleepSec(10);
+				sync(s7);
+				sync(s3);
 			}
+			sync(s14);
 		}
 	}
 	
 	public static class Test6 extends Thread implements Runnable {
 		public void run() {
-			sleepSec(9);
+			sleepSec(21);
 			synchronized(o) {
-				sync(o2rdx);
-				sync(p1o2);
-				sync(p2o2);
+				sync(s10);
+				sync(s8);
 			}
 		}
 	}
 	
 	public static class Test7 extends Thread implements Runnable {
 		public void run() {
-			sleepSec(10);
-			sync(o2rdx);
+			sleepSec(22);
+			sync(s10);
 			int t = x;
 		}
 	}
 
 	public static void main(String args[]) throws Exception {
-		final acyclicNonPredictableRace t1 = new acyclicNonPredictableRace();
+		final Figure9b t1 = new Figure9b();
 		final Test2 t2 = new Test2();
 		final Test3 t3 = new Test3();
 		final Test4 t4 = new Test4();

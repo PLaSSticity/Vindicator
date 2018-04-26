@@ -54,9 +54,7 @@ public class Test extends Thread {
 	static final Object r = new Object();
 
 	// Predictable race: none
-	// WDC-race: x
-	// WCP-race: ?
-	// CP-race: ?
+	// DC-race: x
 
 	static void sync(Object lock) {
 		synchronized (lock) {

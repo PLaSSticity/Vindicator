@@ -38,74 +38,59 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package test;
 
-public class OE1 extends Thread {
+public class Figure2 extends Thread {
 
 	static int x;
 	static int y;
-	static int z;
-	static final Object p = new Object();
 	static final Object m = new Object();
-	static final Object t = new Object();
+	static final Object o = new Object();
+
+	// Predictable race: x
+	// DC-race: x
 	
-	//Predictable races on y and z
-	//WDC: races on y and z
-	//WCP: race on z
-	//CPMode: rd-wr race on var z, no other race.
-	//HBMode: no race
-		
+	static void sleepSec(float sec) {
+		try{
+			Thread.sleep((long)(sec * 1000));
+		} catch(InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	@Override
 	public void run() {
-		y = 1;
-		try{Thread.sleep(500);}catch(Exception e){}
-		synchronized(p) {}
+		x = 1;
+		synchronized(o) {
+			y = 1;
+		}
 	}
 	
 	public static class Test2 extends Thread implements Runnable {
 		public void run() {
-			try{Thread.sleep(600);}catch(Exception e){}
-			synchronized(p) {}
-			synchronized(m) {
-				x = 1;
+			sleepSec(1);
+			synchronized(o) {
+				int t = y;
 			}
+			synchronized(m) {}
 		}
 	}
 	
 	public static class Test3 extends Thread implements Runnable {
 		public void run() {
-			try{Thread.sleep(100);}catch(Exception e){}
-			int v = z; //z = 1;
-			try{Thread.sleep(700);}catch(Exception e){}
-			synchronized(m) {
-				int t = x;//x = 1;
-			}
-			synchronized(t) {}
-		}
-	}
-
-	public static class Test4 extends Thread implements Runnable {
-		public void run() {
-			try{Thread.sleep(2000);}catch(Exception e){}
-			synchronized(t) {
-				y = 1;
-			}
-			y = 1;
-			z = 1;
+			sleepSec(2);
+			synchronized(m) {}
+			int t = x;
 		}
 	}
 
 	public static void main(String args[]) throws Exception {
-		final OE1 t1 = new OE1();
+		final Figure2 t1 = new Figure2();
 		final Test2 t2 = new Test2();
 		final Test3 t3 = new Test3();
-		final Test4 t4 = new Test4();
-		try{Thread.sleep(500);}catch(Exception e){}
 		t1.start();
 		t2.start();
 		t3.start();
-		t4.start();
 		t1.join();
 		t2.join();
 		t3.join();
-		t4.join();
 	}
 }

@@ -38,36 +38,110 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package test;
 
-public class SimpleLazyCPOrder extends Thread {
+public class Figure3 extends Thread {
 
 	static int x;
-	static int y;
 	static final Object m = new Object();
-		
+	static final Object n = new Object();
+	static final Object l = new Object();
+	
+	static int vVar;
+	static int pVar;
+	static int qVar;
+	static int rVar;
+	static final Object v = new Object();
+	static final Object p = new Object();
+	static final Object q = new Object();
+	static final Object r = new Object();
+
+	// Predictable race: x
+	// DC-race: x
+
+	static void sync(Object lock) {
+		synchronized (lock) {
+			if (lock == v) vVar = 1;
+			else if (lock == p) pVar = 1;
+			else if (lock == q) qVar = 1;
+			else if (lock == r) rVar = 1;
+			else throw new RuntimeException();
+		}
+	}
+	
+	static void sleepSec(float sec) {
+		try{
+			Thread.sleep((long)(sec * 1000));
+		} catch(InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	@Override
 	public void run() {
-		y = 1;
 		synchronized(m) {
+			sync(r);
+			sleepSec(2);
+			sync(r);
 			x = 1;
 		}
 	}
 	
 	public static class Test2 extends Thread implements Runnable {
 		public void run() {
-			try{Thread.sleep(500);}catch(Exception e){}
-			synchronized(m) {
-				y = 1;
-				x = 1;
+			sleepSec(1);
+			synchronized(l) {
+				sync(v);
+				synchronized(n) {
+					sync(r);
+				}
 			}
 		}
 	}
 	
+	public static class Test3 extends Thread implements Runnable {
+		public void run() {
+			sleepSec(3);
+			synchronized(n) {
+				sync(q);
+				sync(v);
+			}
+		}
+	}
+	
+	public static class Test4 extends Thread implements Runnable {
+		public void run() {
+			sleepSec(4);
+			synchronized(m) {
+				sync(p);
+				sync(q);
+			}
+		}
+	}
+	
+	public static class Test5 extends Thread implements Runnable {
+		public void run() {
+			sleepSec(5);
+			synchronized(l) {
+				sync(p);
+			}
+			int t = x;
+		}
+	}
+
 	public static void main(String args[]) throws Exception {
-		final SimpleLazyCPOrder t1 = new SimpleLazyCPOrder();
+		final Figure3 t1 = new Figure3();
 		final Test2 t2 = new Test2();
+		final Test3 t3 = new Test3();
+		final Test4 t4 = new Test4();
+		final Test5 t5 = new Test5();
 		t1.start();
 		t2.start();
+		t3.start();
+		t4.start();
+		t5.start();
 		t1.join();
 		t2.join();
+		t3.join();
+		t4.join();
+		t5.join();
 	}
 }

@@ -38,30 +38,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package test;
 
-public class SuccessiveRaces extends Thread {
+public class Figure1 extends Thread {
 
-	static volatile int x;
+	static int x;
 	static int y;
-	
+	static int z;
 	static final Object m = new Object();
 	
-	static int pVar;
-	static int qVar;
-	static final Object p = new Object();
-	static final Object q = new Object();
-
-	// Predictable race: x,y
-	// WDC-race: ?
-	// WCP-race: ?
-	// CP-race: ?
-
-	static void sync(Object lock) {
-		synchronized (lock) {
-			if (lock == p) pVar = 1;
-			else if (lock == q) qVar = 1;
-			else throw new RuntimeException();
-		}
-	}
+	// Predictable race: x
+	// DC-race: x
 	
 	static void sleepSec(float sec) {
 		try{
@@ -73,34 +58,24 @@ public class SuccessiveRaces extends Thread {
 	
 	@Override
 	public void run() {
-		for (int i = 0; i < 2; i++) {
-			sync(p);
-			sync(p);
-			x = 1;
-			int z = x;
-			synchronized(m) {}
-			y = 1;
-			y = 1;
-			z = x;
-			sleepSec(2);
+		x = 1;
+		synchronized(m) {
+			z = 1;
 		}
 	}
 	
 	public static class Test2 extends Thread implements Runnable {
 		public void run() {
 			sleepSec(1);
-			for (int i = 0; i < 2; i++) {
-				y = 1;
-				synchronized(m) {}
-				x = 1;
-				int z = x;
-				sleepSec(3);
+			synchronized(m) {
+				int t = y;
 			}
+			int v = x;
 		}
 	}
 
 	public static void main(String args[]) throws Exception {
-		final SuccessiveRaces t1 = new SuccessiveRaces();
+		final Figure1 t1 = new Figure1();
 		final Test2 t2 = new Test2();
 		t1.start();
 		t2.start();

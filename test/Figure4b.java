@@ -38,60 +38,94 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package test;
 
-public class example86 extends Thread {
+public class Figure4b extends Thread {
 
 	static int x;
-	static int L16Var;
-	static int L4Var;
-	static final Object L16 = new Object();
-	static final Object L4 = new Object();
-	static final Object L7 = new Object();
-		
+	static final Object m = new Object();
+	static final Object n = new Object();
+	
+	static int oVar;
+	static int pVar;
+	static int qVar;
+	static int rVar;
+	static final Object o = new Object();
+	static final Object p = new Object();
+	static final Object q = new Object();
+	static final Object r = new Object();
+
+	// Predictable race: none
+	// DC-race: x
+
+	static void sync(Object lock) {
+		synchronized (lock) {
+			if (lock == o) oVar = 1;
+			else if (lock == p) pVar = 1;
+			else if (lock == q) qVar = 1;
+			else if (lock == r) rVar = 1;
+			else throw new RuntimeException();
+		}
+	}
+	
+	static void sleepSec(float sec) {
+		try{
+			Thread.sleep((long)(sec * 1000));
+		} catch(InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	@Override
 	public void run() {
-		synchronized(L7) {
-			x = 1;
+		x = 1;
+		synchronized(m) {
+			sync(o);
+			sync(p);
 		}
 	}
 	
 	public static class Test2 extends Thread implements Runnable {
 		public void run() {
-			try{Thread.sleep(1000);}catch(Exception e){}
-			synchronized(L7) {
-				synchronized(L16) {
-					L16Var = 1;
-				}
-				try{Thread.sleep(3000);}catch(Exception e){}
-				synchronized(L4) {
-					L4Var = 1;
-				}
+			sleepSec(1);
+			synchronized(n) {
+				sync(q);
+				sync(o);
 			}
 		}
 	}
 	
 	public static class Test3 extends Thread implements Runnable {
 		public void run() {
-			try{Thread.sleep(2000);}catch(Exception e){}
-			synchronized(L16) {
-				L16Var = 1;
+			sleepSec(2);
+			synchronized(n) {
+				sync(r);
+				sync(p);
 			}
-			x = 1;
-			synchronized(L4) {
-				L4Var = 1;
+		}
+	}
+	
+	public static class Test4 extends Thread implements Runnable {
+		public void run() {
+			sleepSec(3);
+			synchronized(m) {
+				sync(q);
+				sync(r);
 			}
+			int t = x;
 		}
 	}
 
 	public static void main(String args[]) throws Exception {
-		final example86 t1 = new example86();
+		final Figure4b t1 = new Figure4b();
 		final Test2 t2 = new Test2();
 		final Test3 t3 = new Test3();
-		try{Thread.sleep(500);}catch(Exception e){}
+		final Test4 t4 = new Test4();
 		t1.start();
 		t2.start();
 		t3.start();
+		t4.start();
 		t1.join();
 		t2.join();
 		t3.join();
+		t4.join();
 	}
 }
