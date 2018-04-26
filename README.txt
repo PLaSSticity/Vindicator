@@ -3,12 +3,12 @@
 ************************************************************
 
 This README provides instructions to build and execute our implementation of Vindicator 
-of the PLDI 2018 Submission #95 High-Coverage, Unbounded Sound Predictive Race Detection.
+of the PLDI 2018 paper "High-Coverage, Unbounded Sound Predictive Race Detection."
 
 Vindicator detects and verifies hard-to-detect races between accesses that are millions of events apart - outside the range of windowed approaches - and also detects and verifies races that the state-of-the-art unbounded approach (WCP) cannot find.
 
 Refer to the accompanying paper for more details: 
-High-Coverage, Unbounded Sound Predictive Race Detection
+"High-Coverage, Unbounded Sound Predictive Race Detection," PLDI 2018, by Roemer, Genç, Bond
 
 ************************
 * Executing Vindicator *
@@ -30,10 +30,10 @@ To execute the benchmark scripts provided:
  - $ ./TEST
 
 To execute a benchmark with java directly:
- - $ /usr/lib/jvm/java-1.8.0/bin/java -javaagent:<Vindicator directory>/build/jar/rragent.jar -Xmx120g -Xbootclasspath/p:<Vindicator directory>/classes:<Vindicator directory>/jars/java-cup-11a.jar: rr.RRMain -classpath=<Vindicator directory>/benchmarks/<provided benchmark>/original.jar -maxTid=14 -array=FINE -field=FINE -noTidGC -availableProcessors=4 -tool=WDC -benchmark=1 -warmup=0 RRBench
+ - $ /usr/lib/jvm/java-1.8.0/bin/java -javaagent:<Vindicator directory>/build/jar/rragent.jar -Xmx20g -Xbootclasspath/p:<Vindicator directory>/classes:<Vindicator directory>/jars/java-cup-11a.jar: rr.RRMain -classpath=<Vindicator directory>/benchmarks/<provided benchmark>/original.jar -maxTid=14 -array=FINE -field=FINE -noTidGC -availableProcessors=8 -tool=WDC -benchmark=1 -warmup=0 RRBench
 
 ## Note
-Some benchmarks require over 60GB to run with our tool, see paper for details. Using the above command, max heap size is set using -Xmx
+A few benchmarks require significantly more than 10GB to run with our tool, see paper for details. Using the above command, max heap size is set using -Xmx
 
 Relevant flags for running our tool can be found by running:
   - $ cd ~/raptor ; ant ; source msetup
@@ -115,7 +115,7 @@ Our implementation is built in RoadRunner version 0.5. Use Eclipse to view and m
 
 Our tool, Vindicator, and related configurations are located under the '~/raptor/src/tools/wdc' directory. Important files are:
 
-1. WDCTool.java file contains the source code implementing the central vector clock analysis (Algorithm 2 in the supplementary material). 
+1. WDCTool.java file contains the source code implementing the central vector clock analysis (Algorithm 2 in the paper). 
   - The boolean flag HB_WCP_ONLY (WDCTool.java, line 110) enables the HB + WCP configuration. 
     The presence of the flag disables pieces of the Vindicator analysis related to tracking the DC relation to obtain a pure WCP analysis.
   - The boolean flag BUILD_EVENT_GRAPH (WDCTool.java, line 107) enables the DC w/o G configuration. 
@@ -129,7 +129,7 @@ The VERBOSE flag in WDCTool.java and VERBOSE_GRAPH and USE_DEBUGGING_INFO flags 
 * Contact *
 ***********
 
-Feel free to contact about with any issues or questions.
+Feel free to contact with any issues or questions.
 Jake Roemer: roemer.37@buckeyemail.osu.edu
 
 **************
