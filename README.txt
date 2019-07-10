@@ -5,6 +5,8 @@
 This README provides instructions to build and execute our implementation of Vindicator 
 of the PLDI 2018 paper "High-Coverage, Unbounded Sound Predictive Race Detection."
 
+Artifact VM Image: Available at https://drive.google.com/file/d/12ri6paETrtAwwVGXhYgI2KAZDRA5oZzc/view?usp=sharing
+
 Vindicator detects and verifies hard-to-detect races between accesses that are millions of events apart - outside the range of windowed approaches - and also detects and verifies races that the state-of-the-art unbounded approach (WCP) cannot find.
 
 Refer to the accompanying paper for more details: 
